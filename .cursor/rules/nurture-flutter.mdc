@@ -1,0 +1,38 @@
+---
+description: Nurture Flutter app project context, architecture, and workflow rules
+alwaysApply: true
+---
+
+# Nurture Flutter App
+
+Flutter client for the Nurture health/food-tracking backend
+(`~/all/projects/nurture_backend`, Django + DRF + JWT, prod at http://72.61.91.102).
+
+**Always read `docs/PROJECT.md` first** — stage roadmap, current status, decisions.
+Update it at the end of every stage.
+
+## Architecture (feature-first clean architecture)
+
+- `lib/features/{feature}/{presentation,domain,data}`
+  - presentation: screens, widgets, Riverpod controllers (`AsyncNotifier`)
+  - domain: entities (immutable, manual `copyWith`), repository interfaces
+  - data: repository implementations, API calls via `core/api/api_client.dart`
+- `lib/core/`: config (API base URL via `--dart-define=API_BASE_URL`), theme,
+  ApiClient (JWT header + auto-refresh on 401), shared Riverpod providers.
+- Widgets max 100 lines; extract sub-widgets into `widgets/` folders.
+- No logic in widgets/setState — all logic in controllers/repositories.
+- `const` constructors everywhere possible. Descriptive variable names.
+
+## Workflow (stage-gated, mirrors backend)
+
+Stages: F0 auth/scaffold → F1 profile → F2 foods+photo → F3 diary/weight
+→ F4 progress charts. Build one stage, run `flutter analyze` + `flutter test`,
+commit, STOP for user confirmation before the next stage.
+
+## Backend API notes
+
+- All responses flat JSON. Auth: `POST /api/auth/{register,login,refresh}/`,
+  `GET|PATCH /api/auth/me/`. Errors: `{"detail": ...}` or `{field: [msgs]}`.
+- Foods global (`/api/foods/`, paginated; `search/?q=` returns plain list).
+- Logs/weight/progress are user-scoped by the JWT automatically.
+- Android uses cleartext HTTP (no TLS on VPS yet).
