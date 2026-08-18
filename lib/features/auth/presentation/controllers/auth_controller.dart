@@ -7,15 +7,15 @@ import '../../domain/entities/auth_user.dart';
 /// screens only render state and forward user actions.
 class AuthController extends AsyncNotifier<AuthUser?> {
   @override
-  Future<AuthUser?> build() => ref.read(authRepositoryProvider).restoreSession();
+  Future<AuthUser?> build() =>
+      ref.read(authRepositoryProvider).restoreSession();
 
   Future<void> login({required String email, required String password}) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(
-      () => ref.read(authRepositoryProvider).login(
-            email: email.trim(),
-            password: password,
-          ),
+      () => ref
+          .read(authRepositoryProvider)
+          .login(email: email.trim(), password: password),
     );
   }
 
@@ -26,11 +26,9 @@ class AuthController extends AsyncNotifier<AuthUser?> {
   }) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(
-      () => ref.read(authRepositoryProvider).register(
-            email: email.trim(),
-            password: password,
-            name: name.trim(),
-          ),
+      () => ref
+          .read(authRepositoryProvider)
+          .register(email: email.trim(), password: password, name: name.trim()),
     );
   }
 
@@ -38,7 +36,13 @@ class AuthController extends AsyncNotifier<AuthUser?> {
     await ref.read(authRepositoryProvider).logout();
     state = const AsyncValue.data(null);
   }
+
+  /// Replaces the signed-in user without a loading flash (used after profile save).
+  void replaceUser(AuthUser user) {
+    state = AsyncValue.data(user);
+  }
 }
 
-final authControllerProvider =
-    AsyncNotifierProvider<AuthController, AuthUser?>(AuthController.new);
+final authControllerProvider = AsyncNotifierProvider<AuthController, AuthUser?>(
+  AuthController.new,
+);

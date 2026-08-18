@@ -1,22 +1,27 @@
 # nurture_flutter
 
 Flutter app for **Nurture**, a personal-first health/food-tracking service.
-Backend: [nurture_backend](https://github.com/) (Django + DRF + JWT).
+Backend: sibling repo `nurture_backend/` (Django + DRF + JWT).
 
 ## Run
 
 ```bash
 flutter pub get
 
+# Linux: one-time native dep for flutter_secure_storage
+sudo apt-get install -y libsecret-1-dev
+
 # against production (default)
 flutter run
 
-# against a local backend
-flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
+# against a local backend (Linux desktop)
+make run-local
+
+# Android emulator → backend on the host machine
+make run-android-local
 ```
 
-Android emulators reach a backend on the host machine via
-`http://10.0.2.2:8000`.
+In Cursor, use the **Nurture (local backend)** launch config.
 
 ## Structure
 
@@ -28,7 +33,11 @@ lib/
 ├── core/          # config, theme, ApiClient (JWT + refresh), providers
 └── features/
     ├── auth/      # login/register, token storage, session restore
-    └── home/      # app shell (tabs arrive in later stages)
+    ├── profile/   # view/edit /api/auth/me/
+    ├── foods/     # search, detail, manual create, photo flow
+    ├── diary/     # day view of logs + weight
+    ├── progress/  # daily totals, weekly bars, weight-trend chart
+    └── home/      # shell (diary body, foods/progress/profile in the app bar)
 ```
 
 ## Checks

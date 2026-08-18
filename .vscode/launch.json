@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Nurture (prod)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "Nurture (local backend)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "deviceId": "linux",
+      "toolArgs": [
+        "--dart-define-from-file=dart_defines/local.json"
+      ]
+    },
+    {
+      "name": "Nurture (Android emulator → host)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "toolArgs": [
+        "--dart-define-from-file=dart_defines/android_emulator.json"
+      ]
+    }
+  ]
+}

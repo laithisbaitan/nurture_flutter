@@ -14,4 +14,15 @@ abstract interface class AuthRepository {
   });
 
   Future<void> logout();
+
+  /// PATCH `/api/auth/me/`. Nulls clear optional fields on the backend.
+  Future<AuthUser> updateProfile({
+    required String name,
+    int? age,
+    String? sex,
+    double? heightCm,
+    double? weightKg,
+    String? activityLevel,
+    String? goal,
+  });
 }

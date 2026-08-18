@@ -1,9 +1,10 @@
 /// App-wide configuration.
 ///
-/// Override the API base URL at build/run time, e.g.:
-///   flutter run --dart-define=API_BASE_URL=http://127.0.0.1:8000
+/// Override the API base URL at build/run time:
+///   make run-local
+///   flutter run --dart-define-from-file=dart_defines/local.json
 /// Android emulator reaching a backend on the host machine:
-///   flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000
+///   make run-android-local
 abstract final class AppConfig {
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
